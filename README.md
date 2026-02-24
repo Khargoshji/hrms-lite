@@ -8,9 +8,10 @@ A lightweight, production-ready Human Resource Management System built as a full
 
 | Service | URL |
 |---------|-----|
-| **Frontend** | `https://hrms-lite.vercel.app` *(update after deploy)* |
-| **Backend API** | `https://hrms-lite-api.onrender.com` *(update after deploy)* |
-| **API Docs** | `https://hrms-lite-api.onrender.com/docs` |
+| **Frontend** | https://hrms-lite-beryl-ten.vercel.app/ |
+| **Backend API** | https://hrms-lite-production-544e.up.railway.app/ |
+| **API Docs** | https://hrms-lite-production-544e.up.railway.app/docs |
+| **GitHub Repo** | https://github.com/Khargoshji/hrms-lite |
 
 ---
 
@@ -35,13 +36,19 @@ A lightweight, production-ready Human Resource Management System built as a full
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| **Frontend** | React 18, Material UI v6, Axios |
-| **Backend** | FastAPI (Python 3.11) |
-| **Database** | MySQL 8 + SQLAlchemy ORM |
-| **Frontend Deploy** | Vercel |
-| **Backend Deploy** | Render |
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| **Frontend** | React 18 | UI framework |
+| **UI Library** | Material UI v6 (MUI) | Components and styling |
+| **HTTP Client** | Axios | API calls from frontend |
+| **Backend** | FastAPI (Python 3.11) | REST API server |
+| **ORM** | SQLAlchemy | Database models and queries |
+| **Validation** | Pydantic v2 | Request/response validation |
+| **Database** | MySQL 8 | Data storage |
+| **DB Driver** | PyMySQL | Python MySQL connector |
+| **Frontend Deploy** | Vercel | Hosting React frontend |
+| **Backend Deploy** | Railway | Hosting FastAPI backend |
+| **Database Host** | Railway MySQL | Online MySQL database |
 
 ---
 
@@ -61,7 +68,6 @@ hrms-lite/
 │   │       ├── attendance.py# POST, GET, DELETE /attendance
 │   │       └── dashboard.py # GET /dashboard
 │   ├── requirements.txt
-│   ├── render.yaml          # Render deploy config
 │   └── .env.example
 │
 └── frontend/
@@ -75,6 +81,7 @@ hrms-lite/
     │   │   ├── AttendanceForm.jsx
     │   │   ├── AttendanceTable.jsx
     │   │   ├── Sidebar.jsx
+    │   │   ├── Footer.jsx
     │   │   ├── LoadingSpinner.jsx
     │   │   ├── EmptyState.jsx
     │   │   └── ErrorAlert.jsx
@@ -105,7 +112,7 @@ hrms-lite/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/hrms-lite.git
+git clone https://github.com/Khargoshji/hrms-lite.git
 cd hrms-lite
 ```
 
@@ -130,7 +137,7 @@ EXIT;
 
 # Configure environment
 cp .env.example .env
-# Edit .env → set your DATABASE_URL:
+# Edit .env and set your DATABASE_URL:
 # DATABASE_URL=mysql+pymysql://root:YOUR_PASSWORD@localhost:3306/hrms_lite
 
 # Start the API server (tables are auto-created on first run)
@@ -152,7 +159,7 @@ npm install
 
 # Configure environment
 cp .env.example .env.local
-# Edit .env.local → confirm backend URL:
+# Edit .env.local and set backend URL:
 # REACT_APP_API_BASE_URL=http://localhost:8000
 
 # Start the dev server
@@ -165,48 +172,59 @@ Frontend is now running at: http://localhost:3000
 
 ## 🚀 Deployment
 
-### Backend → Render
+### Tools Used for Deployment
 
-1. **Create a Render account** at [render.com](https://render.com)
+| What | Tool | Why |
+|------|------|-----|
+| **Frontend Hosting** | Vercel | Free, connects to GitHub, auto-deploys |
+| **Backend Hosting** | Railway | Free trial, supports Python/FastAPI |
+| **Database Hosting** | Railway MySQL | Free MySQL database with Railway project |
+| **Version Control** | GitHub | Source code repository |
 
-2. **Provision a MySQL database**
-   - Go to **Dashboard → New → MySQL**
-   - Note the **Internal Connection String** (use this as `DATABASE_URL`)
-   - Or use **PlanetScale** / **Railway** / **Aiven** for a free-tier MySQL
+---
 
-3. **Deploy the backend web service**
-   - Go to **Dashboard → New → Web Service**
-   - Connect your GitHub repository
+### Backend + Database → Railway
+
+1. **Create account** at [railway.app](https://railway.app) and login with GitHub
+
+2. **Create New Project → MySQL**
+   - Wait for MySQL to come Online
+   - Go to **Variables** tab and copy **MYSQL_PUBLIC_URL**
+   - Change `mysql://` to `mysql+pymysql://` in the copied URL
+
+3. **Deploy Backend**
+   - Click **+ Create → GitHub Repository**
+   - Select `hrms-lite` repository
    - Set **Root Directory** to `backend`
-   - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-   - Add environment variable:
+   - Go to **Variables** tab and add:
      ```
-     DATABASE_URL = mysql+pymysql://user:pass@host:3306/hrms_lite
+     DATABASE_URL = mysql+pymysql://your_railway_mysql_url
      ```
-   - Click **Create Web Service**
+   - Go to **Settings → Deploy** and set Start Command:
+     ```
+     uvicorn app.main:app --host 0.0.0.0 --port $PORT
+     ```
+   - Click **Deploy** ✅
 
-4. Copy your Render service URL (e.g., `https://hrms-lite-api.onrender.com`)
+4. Copy your Railway backend URL from **Settings → Networking → Generate Domain**
 
 ---
 
 ### Frontend → Vercel
 
-1. **Create a Vercel account** at [vercel.com](https://vercel.com)
+1. **Create account** at [vercel.com](https://vercel.com) and login with GitHub
 
-2. **Import your GitHub repository**
+2. **Import GitHub repository**
    - Click **Add New → Project**
-   - Select your repository
+   - Select `hrms-lite` repository
    - Set **Root Directory** to `frontend`
 
-3. **Add environment variable** in Vercel project settings:
+3. **Add environment variable:**
    ```
-   REACT_APP_API_BASE_URL = https://hrms-lite-api.onrender.com
+   REACT_APP_API_BASE_URL = https://your-railway-backend-url.up.railway.app
    ```
 
-4. Click **Deploy** — Vercel will build and host your React app
-
-5. Your frontend URL will be something like `https://hrms-lite.vercel.app`
+4. Click **Deploy** ✅
 
 ---
 
@@ -232,7 +250,7 @@ Frontend is now running at: http://localhost:3000
 | Rule | Detail |
 |------|--------|
 | Required fields | All fields validated server-side (400 if missing) |
-| Email format | Pydantic `EmailStr` validates format |
+| Email format | Pydantic EmailStr validates format |
 | Duplicate Employee ID | Returns 400 with clear error message |
 | Duplicate Email | Returns 400 with clear error message |
 | Duplicate attendance | One record per employee per date enforced |
@@ -243,8 +261,8 @@ Frontend is now running at: http://localhost:3000
 ## ⚠️ Assumptions & Limitations
 
 - **No authentication**: Single admin user assumed; no login required
-- **MySQL only**: Uses `pymysql` driver; PostgreSQL would need `psycopg2` and a URL change
-- **Render free tier**: Backend may sleep after 15 min inactivity — first request may be slow (~30s)
+- **MySQL only**: Uses PyMySQL driver; PostgreSQL would need psycopg2 and a URL change
+- **Railway free trial**: 30 days free — upgrade needed after trial ends
 - **No pagination**: Employee and attendance lists load all records; suitable for small teams
 - **No edit/update**: Employees and attendance can be added or deleted but not edited
 - **Timezone**: Dates stored as-is; no timezone conversion applied
@@ -266,4 +284,4 @@ MIT — see [LICENSE](./LICENSE) for full text.
 
 ---
 
-© 2025 **Kiran Yadav**. All rights reserved.
+© 2026 **Kiran Yadav**. All rights reserved.
