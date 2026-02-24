@@ -4,7 +4,7 @@ import AttendanceForm from "../components/AttendanceForm";
 import AttendanceTable from "../components/AttendanceTable";
 
 export default function AttendancePage({ preselectedEmployee }) {
-  const [selectedEmployee, setSelectedEmployee] = useState(
+  const [selectedEmployee] = useState(
     preselectedEmployee || null
   );
   const [refreshKey, setRefreshKey] = useState(0);

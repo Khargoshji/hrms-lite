@@ -8,7 +8,6 @@ import {
   ListItemText,
   Typography,
   Divider,
-  useTheme,
 } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
@@ -23,7 +22,6 @@ const NAV_ITEMS = [
 ];
 
 export default function Sidebar({ activePage, onNavigate }) {
-  const theme = useTheme();
 
   const content = (
     <Box
