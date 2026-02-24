@@ -23,7 +23,7 @@ const NAV_ITEMS = [
 ];
 
 export default function Sidebar({ activePage, onNavigate }) {
-  const theme = useTheme();
+  
 
   const content = (
     <Box

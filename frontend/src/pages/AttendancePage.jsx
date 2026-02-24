@@ -11,6 +11,10 @@ export default function AttendancePage({ preselectedEmployee }) {
 
   const handleSuccess = () => setRefreshKey((k) => k + 1);
 
+  const handleEmployeeChange = (emp) => {
+    setSelectedEmployee(emp);
+  };
+
   return (
     <Box>
       <Typography variant="h5" fontWeight={700} mb={0.5}>

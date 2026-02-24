@@ -20,7 +20,7 @@ const STATUS_OPTIONS = ["Present", "Absent"];
 
 const todayStr = () => new Date().toISOString().split("T")[0];
 
-export default function AttendanceForm({ preselectedEmployee, onSuccess }) {
+export default function AttendanceForm({ preselectedEmployee, onSuccess, onEmployeeChange }) {
   const [employees, setEmployees] = useState([]);
   const [selectedEmp, setSelectedEmp] = useState(null);
   const [date, setDate] = useState(todayStr());
@@ -107,6 +107,10 @@ export default function AttendanceForm({ preselectedEmployee, onSuccess }) {
                 onChange={(_, val) => {
                   setSelectedEmp(val);
                   setFieldErrors((p) => ({ ...p, employee: "" }));
+
+                  if (onEmployeeChange) {
+                    onEmployeeChange(val);
+                  }
                 }}
                 renderInput={(params) => (
                   <TextField
