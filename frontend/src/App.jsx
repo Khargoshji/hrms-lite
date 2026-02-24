@@ -10,7 +10,7 @@ import {
   Chip,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-
+import { DRAWER_WIDTH } from "./components/Sidebar";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
 import EmployeesPage from "./pages/EmployeesPage";

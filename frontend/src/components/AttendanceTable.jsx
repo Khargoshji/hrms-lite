@@ -55,7 +55,7 @@ export default function AttendanceTable({ employee, refreshTrigger }) {
       .then(setRecords)
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
-  }, [employee, filters]);
+  }, [employee, filters, refreshTrigger]);
 
   useEffect(() => {
     fetch();
