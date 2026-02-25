@@ -19,6 +19,7 @@ import Footer from "./components/Footer";
 export default function App() {
   const [activePage, setActivePage] = useState("dashboard");
   const [attendanceEmployee, setAttendanceEmployee] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
 
   const handleViewAttendance = (emp) => {
@@ -53,7 +54,12 @@ export default function App() {
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default" }}>
       {/* Sidebar */}
-      <Sidebar activePage={activePage} onNavigate={handleNavigate} />
+      <Sidebar
+        activePage={activePage}
+        onNavigate={handleNavigate}
+        mobileOpen={mobileOpen}
+        onMobileClose={() => setMobileOpen(false)}
+      />
 
       {/* Main content */}
       <Box
@@ -62,7 +68,6 @@ export default function App() {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          ml: { md: 0 },
           minWidth: 0,
         }}
       >
@@ -78,10 +83,12 @@ export default function App() {
           }}
         >
           <Toolbar sx={{ gap: 2 }}>
+            {/* Hamburger — only on mobile */}
             <IconButton
               edge="start"
-              sx={{ display: { md: "none" } }}
-              aria-label="menu"
+              onClick={() => setMobileOpen(true)}
+              sx={{ display: { xs: "flex", md: "none" } }}
+              aria-label="open menu"
             >
               <MenuIcon />
             </IconButton>
